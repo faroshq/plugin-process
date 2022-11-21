@@ -2,7 +2,7 @@ apiVersion: apis.kcp.dev/v1alpha1
 kind: APIResourceSchema
 metadata:
   creationTimestamp: null
-  name: today.systemds.plugins.faros.sh
+  name: v20221121.systemds.plugins.faros.sh
 spec:
   group: plugins.faros.sh
   names:

@@ -2,13 +2,15 @@ package plugin
 
 import (
 	"context"
+	"embed"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/phayes/freeport"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -16,11 +18,24 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
+	"github.com/faroshq/faros-hub/pkg/plugins"
 	"github.com/faroshq/plugin-process/pkg/agent/systemd"
 	pluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	utiltemplate "github.com/faroshq/plugin-process/pkg/util/template"
+	"github.com/faroshq/plugin-process/pkg/util/version"
 )
 
-var _ Interface = &SystemD{}
+var (
+	scheme     = runtime.NewScheme()
+	pluginName = "systemd.plugins.faros.sh"
+)
+
+func init() {
+	utilruntime.Must(pluginsv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(corev1.AddToScheme(scheme))
+}
+
+var _ plugins.Interface = &SystemD{}
 
 type SystemD struct {
 	name      string
@@ -30,8 +45,8 @@ type SystemD struct {
 	manager   manager.Manager
 }
 
-func (s *SystemD) Name() string {
-	return "process.systemd"
+func (s *SystemD) GetName(context.Context) (string, error) {
+	return "process.systemd", nil
 }
 
 func (s *SystemD) Init(ctx context.Context, name, namespace string, config *rest.Config) error {
@@ -62,7 +77,7 @@ func (s *SystemD) Init(ctx context.Context, name, namespace string, config *rest
 		Client: s.client,
 		Scheme: s.schema,
 	}).SetupWithManager(mgr); err != nil {
-		klog.Error(err, "unable to create controller", "systemd.plugins.faros.sh")
+		klog.Error(err, "unable to create controller", pluginName)
 		return err
 	}
 
@@ -84,41 +99,49 @@ func (s *SystemD) Run(ctx context.Context) error {
 	return s.manager.Start(ctx)
 }
 
-func (s *SystemD) Stop() error {
+func (s *SystemD) Stop(ctx context.Context) error {
 	return nil
 }
 
-// bootstrap will new instance of plugin for it to be reporting back to hub
-func (s *SystemD) bootstrap(ctx context.Context) error {
-	obj := pluginsv1alpha1.Systemd{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      s.name,
-			Namespace: s.namespace,
-		},
-		Spec: pluginsv1alpha1.SystemdSpec{},
+//go:embed data/*.yaml
+var content embed.FS
+
+func (s *SystemD) GetAPIResourceSchema(ctx context.Context) ([]byte, error) {
+	entries, err := content.ReadDir("data")
+	if err != nil {
+		return nil, err
 	}
-
-	err := s.client.Get(ctx, client.ObjectKey{
-		Namespace: obj.Namespace,
-		Name:      obj.Name,
-	}, &obj)
-	switch {
-	case apierrors.IsNotFound(err):
-		err := s.client.Create(ctx, &obj, &client.CreateOptions{})
-		if err != nil && !apierrors.IsAlreadyExists(err) {
-			return fmt.Errorf("failed to create plugin object: %s", err)
+	for _, entry := range entries {
+		if strings.Contains(entry.Name(), "apiresourceschemas") {
+			return content.ReadFile("data/" + entry.Name())
 		}
-	case err == nil:
-		obj.ResourceVersion = ""
-		// TODO: update path
-
-		err = s.client.Patch(ctx, &obj, client.MergeFrom(obj.DeepCopy()), &client.PatchOptions{})
-		if err != nil {
-			return fmt.Errorf("failed to patch plugin object %s", err)
-		}
-	default:
-		return fmt.Errorf("failed to get the plugin object %s", err)
 	}
+	return nil, fmt.Errorf("apiresourceschemas not found")
+}
 
-	return nil
+func (s *SystemD) GetAPIExportSchema(ctx context.Context) ([]byte, error) {
+	entries, err := content.ReadDir("data")
+	if err != nil {
+		return nil, err
+	}
+	for _, entry := range entries {
+		if strings.Contains(entry.Name(), "apiexport") {
+
+			data, err := content.ReadFile("data/" + entry.Name())
+			if err != nil {
+				return nil, fmt.Errorf("failed to read apiexport: %w", err)
+			}
+			args := utiltemplate.TemplateArgs{
+				Name:                 fmt.Sprintf("%s.%s", version.Get().Version, pluginName),
+				LatestResourceSchema: strings.TrimSuffix(entry.Name(), ".yaml"),
+			}
+			apiExportBytes, err := utiltemplate.RenderTemplate(data, args)
+			if err != nil {
+				return nil, fmt.Errorf("failed to render apiexport: %w", err)
+			}
+
+			return apiExportBytes, nil
+		}
+	}
+	return nil, fmt.Errorf("apiexport not found")
 }

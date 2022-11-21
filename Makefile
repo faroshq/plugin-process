@@ -1,4 +1,8 @@
 REPO ?= quay.io/faroshq/
+TAG_NAME ?= $(shell git describe --tags --abbrev=0)
+JOBDATE		?= $(shell date -u +%Y-%m-%dT%H%M%SZ)
+GIT_REVISION ?= $(shell git describe --tags --always --dirty)
+PLUGIN_VERSION ?= v$(shell date +'%Y%m%d')
 
 LOCALBIN ?= $(shell pwd)/bin
 KUSTOMIZE ?= $(LOCALBIN)/kustomize
@@ -16,19 +20,22 @@ OS := $(shell go env GOOS)
 CONTROLLER_GEN := $(TOOLS_DIR)/$(CONTROLLER_GEN_BIN)-$(CONTROLLER_GEN_VER)
 export CONTROLLER_GEN # so hack scripts can use it
 
+LDFLAGS		+= -s -w
+LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.tag=$(TAG_NAME)
+LDFLAGS		+= -X github.com/synpse-hq/synpse-core/pkg/util/version.commit=$(GIT_REVISION)
+LDFLAGS		+= -X github.com/synpse-hq/synpse-core/pkg/util/version.buildTime=$(JOBDATE)
+LDFLAGS		+= -X github.com/synpse-hq/synpse-core/pkg/util/version.version=$(PLUGIN_VERSION)
+
 tools:$(CONTROLLER_GEN)
 .PHONY: tools
 
-# KCP prefix
-#APIEXPORT_PREFIX ?= v$(shell date +'%Y%m%d')
-APIEXPORT_PREFIX = today
+PLUGIN_NAME_SYSTEMD ?= faros-systemd
 
 KUSTOMIZE_INSTALL_SCRIPT ?= "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"
 $(KUSTOMIZE): ## Download kustomize locally if necessary.
 	mkdir -p $(LOCALBIN)
 	curl -s $(KUSTOMIZE_INSTALL_SCRIPT) | bash -s -- $(subst v,,$(KUSTOMIZE_VERSION)) $(LOCALBIN)
 	touch $(KUSTOMIZE) # we download an "old" file, so make will re-download to refresh it unless we make it newer than the owning dir
-
 
 $(CONTROLLER_GEN):
 	GOBIN=$(TOOLS_GOBIN_DIR) $(GO_INSTALL) sigs.k8s.io/controller-tools/cmd/controller-gen $(CONTROLLER_GEN_BIN) $(CONTROLLER_GEN_VER)
@@ -39,12 +46,11 @@ codegen: $(CONTROLLER_GEN)
 .PHONY: codegen
 
 .PHONY: apiresourceschemas
-apiresourceschemas: $(KUSTOMIZE) ## Convert CRDs from config/crds to APIResourceSchemas. Specify APIEXPORT_PREFIX as needed.
-	$(KUSTOMIZE) build config/crds | kubectl kcp crd snapshot -f - --prefix $(APIEXPORT_PREFIX) > config/kcp/$(APIEXPORT_PREFIX).apiresourceschemas.yaml
-
-PLUGIN_VERSION ?= $(shell git describe --tags --always --dirty)
-PLUGIN_NAME_SYSTEMD ?= faros-systemd
+apiresourceschemas: $(KUSTOMIZE) ## Convert CRDs from config/crds to APIResourceSchemas. Specify PLUGIN_VERSION as needed.
+	rm -rf pkg/plugin/data/*.v20221121.apiresourceschemas
+	$(KUSTOMIZE) build config/crds | kubectl kcp crd snapshot -f - --prefix $(PLUGIN_VERSION) > pkg/plugin/data/$(PLUGIN_VERSION).apiresourceschemas.yaml
 
 build:
-	go build -buildmode=plugin -o ./plugins/${PLUGIN_NAME_SYSTEMD}-${PLUGIN_VERSION}-${ARCH}.so ./cmd/systemd
+	rm -rf ./plugins/*
+	go build -ldflags "$(LDFLAGS)" -o ./plugins/${PLUGIN_NAME_SYSTEMD}-${PLUGIN_VERSION}-${ARCH} ./cmd/systemd
 
