@@ -31,7 +31,7 @@ echo "output: ${SCRIPT_ROOT}"
 #                  instead of the $GOPATH directly. For normal projects this can be dropped.
 bash "${CODEGEN_PKG}"/generate-groups.sh "deepcopy,client,informer,lister" \
   github.com/faroshq/plugin-process/pkg/client github.com/faroshq/plugin-process/pkg/apis \
-  "plugins:v1alpha1" \
+  "services:v1alpha1" \
   --output-base "${SCRIPT_ROOT}" \
   --go-header-file "${SCRIPT_ROOT}"/hack/boilerplate.go.txt \
   --trim-path-prefix github.com/faroshq/plugin-process

@@ -20,7 +20,7 @@ package fake
 import (
 	"context"
 
-	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -31,13 +31,13 @@ import (
 
 // FakeSystemds implements SystemdInterface
 type FakeSystemds struct {
-	Fake *FakePluginsV1alpha1
+	Fake *FakeServicesV1alpha1
 	ns   string
 }
 
-var systemdsResource = schema.GroupVersionResource{Group: "plugins.faros.sh", Version: "v1alpha1", Resource: "systemds"}
+var systemdsResource = schema.GroupVersionResource{Group: "services.plugins.faros.sh", Version: "v1alpha1", Resource: "systemds"}
 
-var systemdsKind = schema.GroupVersionKind{Group: "plugins.faros.sh", Version: "v1alpha1", Kind: "Systemd"}
+var systemdsKind = schema.GroupVersionKind{Group: "services.plugins.faros.sh", Version: "v1alpha1", Kind: "Systemd"}
 
 // Get takes name of the systemd, and returns the corresponding systemd object, and an error if there is any.
 func (c *FakeSystemds) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Systemd, err error) {

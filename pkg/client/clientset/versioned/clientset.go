@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"net/http"
 
-	pluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/plugins/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/services/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -29,19 +29,19 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	PluginsV1alpha1() pluginsv1alpha1.PluginsV1alpha1Interface
+	ServicesV1alpha1() servicesv1alpha1.ServicesV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	pluginsV1alpha1 *pluginsv1alpha1.PluginsV1alpha1Client
+	servicesV1alpha1 *servicesv1alpha1.ServicesV1alpha1Client
 }
 
-// PluginsV1alpha1 retrieves the PluginsV1alpha1Client
-func (c *Clientset) PluginsV1alpha1() pluginsv1alpha1.PluginsV1alpha1Interface {
-	return c.pluginsV1alpha1
+// ServicesV1alpha1 retrieves the ServicesV1alpha1Client
+func (c *Clientset) ServicesV1alpha1() servicesv1alpha1.ServicesV1alpha1Interface {
+	return c.servicesV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -88,7 +88,7 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
-	cs.pluginsV1alpha1, err = pluginsv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.servicesV1alpha1, err = servicesv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.pluginsV1alpha1 = pluginsv1alpha1.New(c)
+	cs.servicesV1alpha1 = servicesv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

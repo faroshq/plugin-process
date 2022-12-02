@@ -12,7 +12,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	pluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
 )
 
 // Reconciler reconciles a SystemD object
@@ -21,9 +21,9 @@ type Reconciler struct {
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=plugins.faros.sh,resources=systemd,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=plugins.faros.sh,resources=systemd/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=plugins.faros.sh,resources=systemd/finalizers,verbs=update
+// +kubebuilder:rbac:groups=services.plugins.faros.sh,resources=systemd,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=services.plugins.faros.sh,resources=systemd/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=services.plugins.faros.sh,resources=systemd/finalizers,verbs=update
 
 // Reconcile reconciles a SystemD object
 func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
@@ -36,7 +36,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 	// Add the logical cluster to the context
 	ctx = logicalcluster.WithCluster(ctx, logicalcluster.New(req.ClusterName))
 
-	var systemd pluginsv1alpha1.Systemd
+	var systemd servicesv1alpha1.Systemd
 	if err := r.Get(ctx, req.NamespacedName, &systemd); err != nil {
 		if apierrors.IsNotFound(err) {
 			return ctrl.Result{}, nil
@@ -70,6 +70,6 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		// TODO: scope to a specific agent
-		For(&pluginsv1alpha1.Systemd{}).
+		For(&servicesv1alpha1.Systemd{}).
 		Complete(r)
 }

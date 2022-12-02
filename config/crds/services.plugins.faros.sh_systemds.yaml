@@ -5,9 +5,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.10.0
   creationTimestamp: null
-  name: systemds.plugins.faros.sh
+  name: systemds.services.plugins.faros.sh
 spec:
-  group: plugins.faros.sh
+  group: services.plugins.faros.sh
   names:
     kind: Systemd
     listKind: SystemdList
@@ -22,7 +22,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Systemd is the Schema for the plugin API
+        description: Systemd plugin helps to manage systemd services on the device.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation

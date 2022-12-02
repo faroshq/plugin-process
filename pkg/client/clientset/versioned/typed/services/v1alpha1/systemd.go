@@ -21,7 +21,7 @@ import (
 	"context"
 	"time"
 
-	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
 	scheme "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
@@ -56,7 +56,7 @@ type systemds struct {
 }
 
 // newSystemds returns a Systemds
-func newSystemds(c *PluginsV1alpha1Client, namespace string) *systemds {
+func newSystemds(c *ServicesV1alpha1Client, namespace string) *systemds {
 	return &systemds{
 		client: c.RESTClient(),
 		ns:     namespace,

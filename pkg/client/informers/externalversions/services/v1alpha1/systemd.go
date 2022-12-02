@@ -21,10 +21,10 @@ import (
 	"context"
 	time "time"
 
-	pluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
 	versioned "github.com/faroshq/plugin-process/pkg/client/clientset/versioned"
 	internalinterfaces "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/faroshq/plugin-process/pkg/client/listers/plugins/v1alpha1"
+	v1alpha1 "github.com/faroshq/plugin-process/pkg/client/listers/services/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -61,16 +61,16 @@ func NewFilteredSystemdInformer(client versioned.Interface, namespace string, re
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.PluginsV1alpha1().Systemds(namespace).List(context.TODO(), options)
+				return client.ServicesV1alpha1().Systemds(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.PluginsV1alpha1().Systemds(namespace).Watch(context.TODO(), options)
+				return client.ServicesV1alpha1().Systemds(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&pluginsv1alpha1.Systemd{},
+		&servicesv1alpha1.Systemd{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,7 +81,7 @@ func (f *systemdInformer) defaultInformer(client versioned.Interface, resyncPeri
 }
 
 func (f *systemdInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&pluginsv1alpha1.Systemd{}, f.defaultInformer)
+	return f.factory.InformerFor(&servicesv1alpha1.Systemd{}, f.defaultInformer)
 }
 
 func (f *systemdInformer) Lister() v1alpha1.SystemdLister {

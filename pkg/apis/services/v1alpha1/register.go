@@ -1,5 +1,5 @@
 //+kubebuilder:object:generate=true
-//+groupName=plugins.faros.sh
+//+groupName=services.plugins.faros.sh
 package v1alpha1
 
 import (
@@ -8,10 +8,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-var GroupName = "plugins.faros.sh"
+var GroupName = "services.plugins.faros.sh"
 
 const (
-	// PluginExamPluginSystemDKindpleKind is the kind for a SystemD plugin
+	// PluginSystemDKind is the kind for a SystemD plugin
 	PluginSystemDKind = "SystemD"
 )
 

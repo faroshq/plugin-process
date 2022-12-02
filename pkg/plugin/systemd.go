@@ -20,18 +20,19 @@ import (
 
 	"github.com/faroshq/faros-hub/pkg/plugins"
 	"github.com/faroshq/plugin-process/pkg/agent/systemd"
-	pluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
 	utiltemplate "github.com/faroshq/plugin-process/pkg/util/template"
 	"github.com/faroshq/plugin-process/pkg/util/version"
 )
 
 var (
-	scheme     = runtime.NewScheme()
-	pluginName = "systemd.plugins.faros.sh"
+	scheme = runtime.NewScheme()
+	// pluginName is the name of the plugin. Should match apiresourceschemas name.
+	pluginName = "systemds.services.plugins.faros.sh"
 )
 
 func init() {
-	utilruntime.Must(pluginsv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(servicesv1alpha1.AddToScheme(scheme))
 	utilruntime.Must(corev1.AddToScheme(scheme))
 }
 
@@ -46,7 +47,11 @@ type SystemD struct {
 }
 
 func (s *SystemD) GetName(context.Context) (string, error) {
-	return "process.systemd", nil
+	return pluginName, nil
+}
+
+func (s *SystemD) GetVersion(context.Context) (string, error) {
+	return version.Get().Version, nil
 }
 
 func (s *SystemD) Init(ctx context.Context, name, namespace string, config *rest.Config) error {
@@ -103,7 +108,7 @@ func (s *SystemD) Stop(ctx context.Context) error {
 	return nil
 }
 
-//go:embed data/*.yaml
+//go:embed data/*
 var content embed.FS
 
 func (s *SystemD) GetAPIResourceSchema(ctx context.Context) ([]byte, error) {
@@ -112,7 +117,7 @@ func (s *SystemD) GetAPIResourceSchema(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 	for _, entry := range entries {
-		if strings.Contains(entry.Name(), "apiresourceschemas") {
+		if strings.Contains(entry.Name(), "apiresourceschemas.yaml") {
 			return content.ReadFile("data/" + entry.Name())
 		}
 	}
@@ -124,24 +129,32 @@ func (s *SystemD) GetAPIExportSchema(ctx context.Context) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	var apiExportName, apiResourceSchemaName string
 	for _, entry := range entries {
-		if strings.Contains(entry.Name(), "apiexport") {
-
-			data, err := content.ReadFile("data/" + entry.Name())
-			if err != nil {
-				return nil, fmt.Errorf("failed to read apiexport: %w", err)
-			}
-			args := utiltemplate.TemplateArgs{
-				Name:                 fmt.Sprintf("%s.%s", version.Get().Version, pluginName),
-				LatestResourceSchema: strings.TrimSuffix(entry.Name(), ".yaml"),
-			}
-			apiExportBytes, err := utiltemplate.RenderTemplate(data, args)
-			if err != nil {
-				return nil, fmt.Errorf("failed to render apiexport: %w", err)
-			}
-
-			return apiExportBytes, nil
+		if strings.Contains(entry.Name(), "apiexport.yaml.template") {
+			apiExportName = entry.Name()
+		}
+		if strings.Contains(entry.Name(), "apiresourceschemas.yaml") {
+			apiResourceSchemaName = entry.Name()
 		}
 	}
-	return nil, fmt.Errorf("apiexport not found")
+	if apiExportName == "" || apiResourceSchemaName == "" {
+		return nil, fmt.Errorf("apiexport or apiresourceschemas not found")
+	}
+
+	data, err := content.ReadFile("data/" + apiExportName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read apiexport: %w", err)
+	}
+	args := utiltemplate.TemplateArgs{
+		Name:                 fmt.Sprintf("%s.%s", version.Get().Version, pluginName),
+		LatestResourceSchema: strings.TrimSuffix(apiResourceSchemaName, ".yaml"),
+	}
+	apiExportBytes, err := utiltemplate.RenderTemplate(data, args)
+	if err != nil {
+		return nil, fmt.Errorf("failed to render apiexport: %w", err)
+	}
+
+	return apiExportBytes, nil
+
 }

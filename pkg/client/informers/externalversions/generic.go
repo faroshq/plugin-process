@@ -20,7 +20,7 @@ package externalversions
 import (
 	"fmt"
 
-	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/plugins/v1alpha1"
+	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -51,9 +51,9 @@ func (f *genericInformer) Lister() cache.GenericLister {
 // TODO extend this to unknown resources with a client pool
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
-	// Group=plugins.faros.sh, Version=v1alpha1
+	// Group=services.plugins.faros.sh, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("systemds"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Plugins().V1alpha1().Systemds().Informer()}, nil
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Services().V1alpha1().Systemds().Informer()}, nil
 
 	}
 

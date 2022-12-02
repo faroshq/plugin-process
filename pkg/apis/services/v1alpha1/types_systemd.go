@@ -13,7 +13,7 @@ import (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:object:root=true
 
-// Systemd is the Schema for the plugin API
+// Systemd plugin helps to manage systemd services on the device.
 type Systemd struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

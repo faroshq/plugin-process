@@ -78,8 +78,8 @@ github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7
 github.com/evanphx/json-patch v0.5.2/go.mod h1:ZWS5hhDbVDyob71nXKNL0+PWn6ToqBHMikGIFbs31qQ=
 github.com/evanphx/json-patch v5.6.0+incompatible h1:jBYDEEiFBPxA0v50tFdvOzQQTCvpL6mnFh5mB2/l16U=
 github.com/evanphx/json-patch v5.6.0+incompatible/go.mod h1:50XU6AFN0ol/bzJsmQLiYLvXMP4fmwYFNcr97nuDLSk=
-github.com/faroshq/faros-hub v0.0.0-20221121154315-4ba32a8af810 h1:2Losv3QsRK8kQkqzRwY/SJHHxybRiKvFFucGgS022pk=
-github.com/faroshq/faros-hub v0.0.0-20221121154315-4ba32a8af810/go.mod h1:8uSq4WjxVyaLfKgo5bmS1xmKvAeHo8Z/Y46BpOR/29g=
+github.com/faroshq/faros-hub v0.0.0-20221202104012-97e98db58fdc h1:2kljrkYxNEF9SWjO7KI73ml2ZuYxfcmKeA/KsuojyxQ=
+github.com/faroshq/faros-hub v0.0.0-20221202104012-97e98db58fdc/go.mod h1:HDjLycEVwM94gQrvYe7JII1BmIbxkozfOzzFJJFVoIk=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
 github.com/fatih/color v1.12.0 h1:mRhaKNwANqRgUBGKmnI5ZxEk7QXmjQeCcuYFMX2bfcc=
 github.com/fatih/color v1.12.0/go.mod h1:ELkj/draVOlAH/xkhN6mQ50Qd0MPOk5AAr3maGEBuJM=
@@ -212,8 +212,8 @@ github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
-github.com/kcp-dev/apimachinery v0.0.0-20220912132244-efe716c18e43 h1:vPv81j3mT5VYQ6YnCXrnKJQPeRNHwPcGJNsQNQfIG9Q=
-github.com/kcp-dev/apimachinery v0.0.0-20220912132244-efe716c18e43/go.mod h1:qnvUHkdxOrNzX17yX+z8r81CZEBuFdveNzWqFlwZ55w=
+github.com/kcp-dev/apimachinery v0.0.0-20221102195355-d65878bc16be h1:2uDzJ896+ojtzgr9HJL8+tZEoqhq8blwymGinWFrQ6E=
+github.com/kcp-dev/apimachinery v0.0.0-20221102195355-d65878bc16be/go.mod h1:qnvUHkdxOrNzX17yX+z8r81CZEBuFdveNzWqFlwZ55w=
 github.com/kcp-dev/controller-runtime v0.12.2-0.20220808200255-4b60fd66e5de h1:IuXSIlIKJiR3ZsuO5PJ1yYdncsheX3A9rpuXQJ/TfQg=
 github.com/kcp-dev/controller-runtime v0.12.2-0.20220808200255-4b60fd66e5de/go.mod h1:OFkNQPsWPPz6qWrIY3FUjmSb0W7qKLK8aZC/xBIJwUE=
 github.com/kcp-dev/kcp/pkg/apis v0.9.1 h1:AtGD9OQqiT2Prkg0Rz8KhkIUCD1E4RnO3iO0jGcG4h8=

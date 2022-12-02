@@ -19,8 +19,8 @@ package fake
 
 import (
 	clientset "github.com/faroshq/plugin-process/pkg/client/clientset/versioned"
-	pluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/plugins/v1alpha1"
-	fakepluginsv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/plugins/v1alpha1/fake"
+	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/services/v1alpha1"
+	fakeservicesv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/services/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -78,7 +78,7 @@ var (
 	_ testing.FakeClient  = &Clientset{}
 )
 
-// PluginsV1alpha1 retrieves the PluginsV1alpha1Client
-func (c *Clientset) PluginsV1alpha1() pluginsv1alpha1.PluginsV1alpha1Interface {
-	return &fakepluginsv1alpha1.FakePluginsV1alpha1{Fake: &c.Fake}
+// ServicesV1alpha1 retrieves the ServicesV1alpha1Client
+func (c *Clientset) ServicesV1alpha1() servicesv1alpha1.ServicesV1alpha1Interface {
+	return &fakeservicesv1alpha1.FakeServicesV1alpha1{Fake: &c.Fake}
 }

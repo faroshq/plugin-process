@@ -24,7 +24,7 @@ import (
 
 	versioned "github.com/faroshq/plugin-process/pkg/client/clientset/versioned"
 	internalinterfaces "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/internalinterfaces"
-	plugins "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/plugins"
+	services "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/services"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -171,9 +171,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Plugins() plugins.Interface
+	Services() services.Interface
 }
 
-func (f *sharedInformerFactory) Plugins() plugins.Interface {
-	return plugins.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Services() services.Interface {
+	return services.New(f, f.namespace, f.tweakListOptions)
 }

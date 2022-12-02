@@ -4,5 +4,5 @@ metadata:
   name: {{.Name}}
 spec:
   latestResourceSchemas:
-    - {{.LatestResourceSchema}}
+  - {{.LatestResourceSchema}}
   permissionClaims:

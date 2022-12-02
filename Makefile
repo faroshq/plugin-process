@@ -22,9 +22,9 @@ export CONTROLLER_GEN # so hack scripts can use it
 
 LDFLAGS		+= -s -w
 LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.tag=$(TAG_NAME)
-LDFLAGS		+= -X github.com/synpse-hq/synpse-core/pkg/util/version.commit=$(GIT_REVISION)
-LDFLAGS		+= -X github.com/synpse-hq/synpse-core/pkg/util/version.buildTime=$(JOBDATE)
-LDFLAGS		+= -X github.com/synpse-hq/synpse-core/pkg/util/version.version=$(PLUGIN_VERSION)
+LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.commit=$(GIT_REVISION)
+LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.buildTime=$(JOBDATE)
+LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.version=$(PLUGIN_VERSION)
 
 tools:$(CONTROLLER_GEN)
 .PHONY: tools
@@ -47,10 +47,10 @@ codegen: $(CONTROLLER_GEN)
 
 .PHONY: apiresourceschemas
 apiresourceschemas: $(KUSTOMIZE) ## Convert CRDs from config/crds to APIResourceSchemas. Specify PLUGIN_VERSION as needed.
-	rm -rf pkg/plugin/data/*.v20221121.apiresourceschemas
+	rm -rf pkg/plugin/data/*.apiresourceschemas.yaml
 	$(KUSTOMIZE) build config/crds | kubectl kcp crd snapshot -f - --prefix $(PLUGIN_VERSION) > pkg/plugin/data/$(PLUGIN_VERSION).apiresourceschemas.yaml
 
-build:
+build: codegen apiresourceschemas
 	rm -rf ./plugins/*
 	go build -ldflags "$(LDFLAGS)" -o ./plugins/${PLUGIN_NAME_SYSTEMD}-${PLUGIN_VERSION}-${ARCH} ./cmd/systemd
 

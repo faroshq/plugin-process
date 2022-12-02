@@ -47,7 +47,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kcp-dev/apimachinery v0.0.0-20220912132244-efe716c18e43 // indirect
+	github.com/kcp-dev/apimachinery v0.0.0-20221102195355-d65878bc16be // indirect
 	github.com/kisielk/errcheck v1.5.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
@@ -93,6 +93,6 @@ require (
 )
 
 replace (
-	github.com/faroshq/faros-hub => github.com/faroshq/faros-hub v0.0.0-20221121154315-4ba32a8af810 //dev
+	github.com/faroshq/faros-hub => github.com/faroshq/faros-hub v0.0.0-20221202104012-97e98db58fdc //dev
 	sigs.k8s.io/controller-runtime => github.com/kcp-dev/controller-runtime v0.12.2-0.20220808200255-4b60fd66e5de
 )
