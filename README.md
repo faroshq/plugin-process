@@ -10,5 +10,5 @@ Folder structure:
 * `pkg/server` - contains server code*
 * `pkg/agent` - contains agent code
 * `pkg/apis` - contains plugin api code
-* `cmd` - entrypoints for server and agent
+* `cmd` - entrypoint plugin
 
