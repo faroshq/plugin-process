@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"net/http"
 
-	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/services/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-services/pkg/client/clientset/versioned/typed/services/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

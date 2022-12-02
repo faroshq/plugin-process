@@ -3,7 +3,7 @@ package systemd
 import (
 	"context"
 
-	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-services/pkg/apis/services/v1alpha1"
 	"github.com/go-logr/logr"
 	conditionsv1alpha1 "github.com/kcp-dev/kcp/pkg/apis/third_party/conditions/apis/conditions/v1alpha1"
 	"github.com/kcp-dev/kcp/pkg/apis/third_party/conditions/util/conditions"

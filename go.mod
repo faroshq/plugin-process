@@ -1,4 +1,4 @@
-module github.com/faroshq/plugin-process
+module github.com/faroshq/plugin-services
 
 go 1.18
 

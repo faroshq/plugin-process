@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/faroshq/faros-hub/pkg/plugins/shared"
-	farosplugin "github.com/faroshq/plugin-process/pkg/plugin"
+	farosplugin "github.com/faroshq/plugin-services/pkg/plugin"
 	"github.com/hashicorp/go-plugin"
 )
 

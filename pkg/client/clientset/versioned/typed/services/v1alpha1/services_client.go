@@ -20,8 +20,8 @@ package v1alpha1
 import (
 	"net/http"
 
-	v1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
-	"github.com/faroshq/plugin-process/pkg/client/clientset/versioned/scheme"
+	v1alpha1 "github.com/faroshq/plugin-services/pkg/apis/services/v1alpha1"
+	"github.com/faroshq/plugin-services/pkg/client/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

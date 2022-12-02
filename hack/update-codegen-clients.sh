@@ -30,11 +30,11 @@ echo "output: ${SCRIPT_ROOT}"
 #                  k8s.io/kubernetes. The output-base is needed for the generators to output into the vendor dir
 #                  instead of the $GOPATH directly. For normal projects this can be dropped.
 bash "${CODEGEN_PKG}"/generate-groups.sh "deepcopy,client,informer,lister" \
-  github.com/faroshq/plugin-process/pkg/client github.com/faroshq/plugin-process/pkg/apis \
+  github.com/faroshq/plugin-services/pkg/client github.com/faroshq/plugin-services/pkg/apis \
   "services:v1alpha1" \
   --output-base "${SCRIPT_ROOT}" \
   --go-header-file "${SCRIPT_ROOT}"/hack/boilerplate.go.txt \
-  --trim-path-prefix github.com/faroshq/plugin-process
+  --trim-path-prefix github.com/faroshq/plugin-services
 
 # To use your own boilerplate text append:
 #   --go-header-file "${SCRIPT_ROOT}"/hack/custom-boilerplate.go.txt

@@ -21,10 +21,10 @@ CONTROLLER_GEN := $(TOOLS_DIR)/$(CONTROLLER_GEN_BIN)-$(CONTROLLER_GEN_VER)
 export CONTROLLER_GEN # so hack scripts can use it
 
 LDFLAGS		+= -s -w
-LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.tag=$(TAG_NAME)
-LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.commit=$(GIT_REVISION)
-LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.buildTime=$(JOBDATE)
-LDFLAGS		+= -X github.com/faroshq/plugin-process/pkg/util/version.version=$(PLUGIN_VERSION)
+LDFLAGS		+= -X github.com/faroshq/plugin-services/pkg/util/version.tag=$(TAG_NAME)
+LDFLAGS		+= -X github.com/faroshq/plugin-services/pkg/util/version.commit=$(GIT_REVISION)
+LDFLAGS		+= -X github.com/faroshq/plugin-services/pkg/util/version.buildTime=$(JOBDATE)
+LDFLAGS		+= -X github.com/faroshq/plugin-services/pkg/util/version.version=$(PLUGIN_VERSION)
 
 tools:$(CONTROLLER_GEN)
 .PHONY: tools

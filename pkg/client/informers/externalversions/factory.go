@@ -22,9 +22,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/faroshq/plugin-process/pkg/client/clientset/versioned"
-	internalinterfaces "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/internalinterfaces"
-	services "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/services"
+	versioned "github.com/faroshq/plugin-services/pkg/client/clientset/versioned"
+	internalinterfaces "github.com/faroshq/plugin-services/pkg/client/informers/externalversions/internalinterfaces"
+	services "github.com/faroshq/plugin-services/pkg/client/informers/externalversions/services"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

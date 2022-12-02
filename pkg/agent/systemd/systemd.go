@@ -12,7 +12,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
+	servicesv1alpha1 "github.com/faroshq/plugin-services/pkg/apis/services/v1alpha1"
 )
 
 // Reconciler reconciles a SystemD object

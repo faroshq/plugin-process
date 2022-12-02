@@ -18,9 +18,9 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/faroshq/plugin-process/pkg/client/clientset/versioned"
-	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/services/v1alpha1"
-	fakeservicesv1alpha1 "github.com/faroshq/plugin-process/pkg/client/clientset/versioned/typed/services/v1alpha1/fake"
+	clientset "github.com/faroshq/plugin-services/pkg/client/clientset/versioned"
+	servicesv1alpha1 "github.com/faroshq/plugin-services/pkg/client/clientset/versioned/typed/services/v1alpha1"
+	fakeservicesv1alpha1 "github.com/faroshq/plugin-services/pkg/client/clientset/versioned/typed/services/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

@@ -9,8 +9,10 @@ import (
 
 	"github.com/phayes/freeport"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -19,10 +21,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
 	"github.com/faroshq/faros-hub/pkg/plugins"
-	"github.com/faroshq/plugin-process/pkg/agent/systemd"
-	servicesv1alpha1 "github.com/faroshq/plugin-process/pkg/apis/services/v1alpha1"
-	utiltemplate "github.com/faroshq/plugin-process/pkg/util/template"
-	"github.com/faroshq/plugin-process/pkg/util/version"
+	"github.com/faroshq/plugin-services/pkg/agent/systemd"
+	servicesv1alpha1 "github.com/faroshq/plugin-services/pkg/apis/services/v1alpha1"
+	utiltemplate "github.com/faroshq/plugin-services/pkg/util/template"
+	"github.com/faroshq/plugin-services/pkg/util/version"
 )
 
 var (
@@ -139,16 +141,29 @@ func (s *SystemD) GetAPIExportSchema(ctx context.Context) ([]byte, error) {
 		}
 	}
 	if apiExportName == "" || apiResourceSchemaName == "" {
-		return nil, fmt.Errorf("apiexport or apiresourceschemas not found")
+		return nil, fmt.Errorf("apiexport or apiresourceschema not found")
 	}
 
-	data, err := content.ReadFile("data/" + apiExportName)
+	// get name for apiresourceschemas
+	data, err := content.ReadFile("data/" + apiResourceSchemaName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read apiresourceschema: %w", err)
+	}
+
+	var unstructured unstructured.Unstructured
+	err = yaml.Unmarshal(data, &unstructured)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal apiresourceschema: %w", err)
+	}
+
+	data, err = content.ReadFile("data/" + apiExportName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read apiexport: %w", err)
 	}
+
 	args := utiltemplate.TemplateArgs{
 		Name:                 fmt.Sprintf("%s.%s", version.Get().Version, pluginName),
-		LatestResourceSchema: strings.TrimSuffix(apiResourceSchemaName, ".yaml"),
+		LatestResourceSchema: unstructured.GetName(),
 	}
 	apiExportBytes, err := utiltemplate.RenderTemplate(data, args)
 	if err != nil {

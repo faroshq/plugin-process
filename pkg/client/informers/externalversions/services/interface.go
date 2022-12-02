@@ -18,8 +18,8 @@ limitations under the License.
 package services
 
 import (
-	internalinterfaces "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/faroshq/plugin-process/pkg/client/informers/externalversions/services/v1alpha1"
+	internalinterfaces "github.com/faroshq/plugin-services/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/faroshq/plugin-services/pkg/client/informers/externalversions/services/v1alpha1"
 )
 
 // Interface provides access to each of this group's versions.

@@ -1,8 +1,8 @@
-# Plugin Process
+# Plugin Services
 
 Plugin to manage system process on the server.
 
-Current implementation support only `Systemd` process manager.
+Current implementation support only `SystemD` process manager.
 
 ## Development
 
