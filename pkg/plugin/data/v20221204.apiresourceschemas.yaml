@@ -2,7 +2,7 @@ apiVersion: apis.kcp.dev/v1alpha1
 kind: APIResourceSchema
 metadata:
   creationTimestamp: null
-  name: v20221202.systemds.services.plugins.faros.sh
+  name: v20221204.systemds.services.plugins.faros.sh
 spec:
   group: services.plugins.faros.sh
   names:
@@ -34,6 +34,24 @@ spec:
           type: object
         spec:
           description: SystemdSpec defines the desired state of plugin
+          properties:
+            services:
+              items:
+                properties:
+                  activationMode:
+                    description: ActivationMode of the service
+                    type: string
+                  desiredState:
+                    description: DesiredStatus is desired status of the service
+                    type: string
+                  enableMode:
+                    description: EnableMode of the service
+                    type: string
+                  name:
+                    description: Name of the service
+                    type: string
+                type: object
+              type: array
           type: object
         status:
           description: SystemDStatus defines the observed state of plugin
@@ -80,6 +98,24 @@ spec:
                 - lastTransitionTime
                 - status
                 - type
+                type: object
+              type: array
+            services:
+              description: Units is the list of units managed by the plugin
+              items:
+                properties:
+                  desiredState:
+                    description: DesiredStatus of the service
+                    type: string
+                  error:
+                    description: Error message if the service failed to start
+                    type: string
+                  name:
+                    description: Name of the service
+                    type: string
+                  state:
+                    description: State defines current state of the service
+                    type: string
                 type: object
               type: array
           type: object

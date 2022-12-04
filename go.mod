@@ -3,6 +3,7 @@ module github.com/faroshq/plugin-services
 go 1.18
 
 require (
+	github.com/coreos/go-systemd/v22 v22.5.0
 	github.com/faroshq/faros-hub v0.0.0-00010101000000-000000000000
 	github.com/go-bindata/go-bindata/v3 v3.1.3
 	github.com/go-logr/logr v1.2.3
@@ -10,6 +11,7 @@ require (
 	github.com/kcp-dev/kcp/pkg/apis v0.9.1
 	github.com/kcp-dev/logicalcluster/v2 v2.0.0-alpha.3
 	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
+	github.com/stretchr/testify v1.8.0
 	golang.org/x/tools v0.2.0
 	k8s.io/api v0.25.0
 	k8s.io/apimachinery v0.25.4
@@ -34,6 +36,7 @@ require (
 	github.com/go-openapi/jsonreference v0.19.5 // indirect
 	github.com/go-openapi/swag v0.19.14 // indirect
 	github.com/gobuffalo/flect v0.2.5 // indirect
+	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -60,6 +63,7 @@ require (
 	github.com/oklog/run v1.0.0 // indirect
 	github.com/onsi/gomega v1.20.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.13.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
